@@ -1,0 +1,58 @@
+.TH simple_shell 1 "November 2025" "version 1.0" "User Commands"
+.SH NAME
+simple_shell \- a simple UNIX command interpreter
+.SH SYNOPSIS
+.B simple_shell
+.RI [command_file]
+.SH DESCRIPTION
+.B simple_shell
+is a simple UNIX command interpreter written in C.
+It reads commands from standard input or from a file and executes them,
+mimicking basic behavior of the standard /bin/sh shell.
+
+The shell supports:
+.IP \[bu] 2
+Execution of commands in both interactive and non-interactive modes.
+.IP \[bu] 2
+Handling of the PATH environment variable to locate executables.
+.IP \[bu] 2
+Built-in commands such as
+.BR exit
+and
+.BR env .
+.IP \[bu] 2
+Error handling and proper process management using
+.BR fork (2)
+and
+.BR execve (2) .
+
+.SH BUILTINS
+.TP
+.B exit
+Exit the shell.
+.TP
+.B env
+Print the current environment variables.
+
+.SH EXAMPLES
+.TP
+Run in interactive mode:
+.EX
+$ ./hsh
+($) /bin/ls
+($) exit
+.EE
+.TP
+Run in non-interactive mode:
+.EX
+$ echo "/bin/ls" | ./hsh
+.EE
+
+.SH AUTHOR
+Written by Almansour Khaled Shaden and Teammate Name.
+
+.SH SEE ALSO
+.BR sh (1),
+.BR execve (2),
+.BR fork (2)
+
