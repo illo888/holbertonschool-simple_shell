@@ -21,6 +21,7 @@ char **split_line(char *line);
 int execute(char **args);
 
 /* utils.c */
+char *_getenv(char *name);
 char *find_path(char *command);
 void free_args(char **args);
 
