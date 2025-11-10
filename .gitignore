@@ -17,3 +17,6 @@ Thumbs.db
 # Test files
 test_*
 checker
+
+# Core dumps
+core.*
