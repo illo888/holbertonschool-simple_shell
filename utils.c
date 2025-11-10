@@ -1,35 +1,6 @@
 #include "shell.h"
 
 /**
- * _getenv - gets environment variable value
- * @name: name of the environment variable
- *
- * Return: value of the environment variable or NULL
- */
-char *_getenv(char *name)
-{
-	int i = 0, j;
-	char *value;
-
-	if (!name || !environ)
-		return (NULL);
-
-	while (environ[i])
-	{
-		j = 0;
-		while (name[j] && environ[i][j] && name[j] == environ[i][j])
-			j++;
-		if (name[j] == '\0' && environ[i][j] == '=')
-		{
-			value = &environ[i][j + 1];
-			return (value);
-		}
-		i++;
-	}
-	return (NULL);
-}
-
-/**
  * find_path - finds full path of a command
  * @command: the command to find
  *
@@ -50,7 +21,7 @@ char *find_path(char *command)
 		return (NULL);
 	}
 
-	path = _getenv("PATH");
+	path = getenv("PATH");
 	if (!path)
 		return (NULL);
 
@@ -61,17 +32,20 @@ char *find_path(char *command)
 	dir = strtok(path_copy, ":");
 	while (dir)
 	{
-		full_path = build_full_path(dir, command);
+		full_path = malloc(strlen(dir) + strlen(command) + 2);
 		if (!full_path)
 		{
 			free(path_copy);
 			return (NULL);
 		}
+
+		sprintf(full_path, "%s/%s", dir, command);
 		if (stat(full_path, &st) == 0)
 		{
 			free(path_copy);
 			return (full_path);
 		}
+
 		free(full_path);
 		dir = strtok(NULL, ":");
 	}
