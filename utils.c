@@ -61,20 +61,17 @@ char *find_path(char *command)
 	dir = strtok(path_copy, ":");
 	while (dir)
 	{
-		full_path = malloc(strlen(dir) + strlen(command) + 2);
+		full_path = build_full_path(dir, command);
 		if (!full_path)
 		{
 			free(path_copy);
 			return (NULL);
 		}
-
-		sprintf(full_path, "%s/%s", dir, command);
 		if (stat(full_path, &st) == 0)
 		{
 			free(path_copy);
 			return (full_path);
 		}
-
 		free(full_path);
 		dir = strtok(NULL, ":");
 	}
