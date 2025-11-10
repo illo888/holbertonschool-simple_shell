@@ -9,25 +9,41 @@
  */
 int main(int argc, char **argv)
 {
-    (void)argc;
-    (void)argv;
+	char *line = NULL;
+	char **args;
+	size_t len = 0;
+	int builtin_status;
 
-    if (isatty(STDIN_FILENO))
-        shell_loop();
-    else
-    {
-        char *line = NULL;
-        size_t len = 0;
+	(void)argc;
+	(void)argv;
 
-        while (getline(&line, &len, stdin) != -1)
-        {
-            char **args = split_line(line);
-            if (args[0] != NULL)
-                execute(args);
-            free_args(args);
-        }
-        free(line);
-    }
+	if (isatty(STDIN_FILENO))
+	{
+		shell_loop();
+	}
+	else
+	{
+		while (getline(&line, &len, stdin) != -1)
+		{
+			args = split_line(line);
+			if (args[0] != NULL)
+			{
+				builtin_status = check_builtin(args);
+				if (builtin_status == -1)
+				{
+					free_args(args);
+					free(line);
+					break;
+				}
+				else if (builtin_status == 0)
+				{
+					execute(args);
+				}
+			}
+			free_args(args);
+		}
+		free(line);
+	}
 
-    return (0);
+	return (0);
 }
