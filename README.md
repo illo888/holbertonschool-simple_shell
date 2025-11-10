@@ -82,3 +82,59 @@ AUTHORS  README.md  execute.c  main.c  shell.c  shell.h  utils.c
 
 ## License
 This project is part of the Holberton School curriculum.
+
+---
+
+## Testing
+
+### Run All Tests
+```bash
+./run_tests.sh
+```
+
+### Manual Testing
+
+**Interactive mode:**
+```bash
+$ ./hsh
+($) ls
+($) /bin/pwd
+($) env
+($) exit
+```
+
+**Non-interactive mode:**
+```bash
+$ echo "ls" | ./hsh
+$ echo "env" | ./hsh
+```
+
+### Check for Memory Leaks
+```bash
+echo "exit" | valgrind --leak-check=full ./hsh
+```
+
+### Betty Style Check
+```bash
+betty *.c *.h
+```
+
+---
+
+## Project Structure
+```
+holbertonschool-simple_shell/
+├── AUTHORS                 # Contributors list
+├── README.md              # This file
+├── CHECKLIST.md          # Project completion checklist
+├── main.c                # Entry point
+├── shell.c               # Main shell loop
+├── shell.h               # Header file
+├── execute.c             # Command execution
+├── builtins.c            # Built-in commands
+├── utils.c               # Utility functions
+├── error_handler.c       # Error handling
+├── man_1_simple_shell    # Manual page
+├── run_tests.sh          # Test suite
+└── .gitignore            # Git ignore rules
+```
