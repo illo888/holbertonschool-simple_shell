@@ -29,4 +29,8 @@ int builtin_env(void);
 int builtin_exit(char **args);
 int check_builtin(char **args);
 
+/* error_handler.c */
+void print_error(char *program_name, char *cmd, char *msg);
+int get_exit_status(int status);
+
 #endif /* SHELL_H */
