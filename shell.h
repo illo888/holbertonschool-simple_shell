@@ -12,15 +12,21 @@
 
 extern char **environ;
 
-/* main_shell.c */
+/* shell.c */
 void shell_loop(void);
 char *read_line(void);
 char **split_line(char *line);
+
+/* execute.c */
 int execute(char **args);
 
 /* utils.c */
 char *find_path(char *command);
 void free_args(char **args);
 
-#endif /* SHELL_H */
+/* builtins.c */
+int builtin_env(void);
+int builtin_exit(char **args);
+int check_builtin(char **args);
 
+#endif /* SHELL_H */
