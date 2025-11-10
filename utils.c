@@ -59,7 +59,7 @@ char *find_path(char *command)
 	char *path, *path_copy, *dir, *full_path;
 	struct stat st;
 
-	if (command == NULL)
+	if (!command)
 		return (NULL);
 
 	if (command[0] == '/' || command[0] == '.')
@@ -82,15 +82,14 @@ char *find_path(char *command)
 	{
 		full_path = build_full_path(dir, command);
 		if (!full_path)
-		{
-			free(path_copy);
-			return (NULL);
-		}
+			break;
+
 		if (stat(full_path, &st) == 0)
 		{
 			free(path_copy);
 			return (full_path);
 		}
+
 		free(full_path);
 		dir = strtok(NULL, ":");
 	}
@@ -98,7 +97,6 @@ char *find_path(char *command)
 	free(path_copy);
 	return (NULL);
 }
-
 /**
  * free_args - frees the array of arguments
  * @args: array of strings to free
