@@ -1,14 +1,15 @@
-.TH simple_shell 1 "November 2025" "version 1.0" "User Commands"
+.TH SIMPLE_SHELL 1 "November 2025" "version 1.0" "User Commands"
 .SH NAME
 simple_shell \- a simple UNIX command interpreter
 .SH SYNOPSIS
-.B simple_shell
-.RI [command_file]
+.B hsh
+.RI [ command_file ]
 .SH DESCRIPTION
 .B simple_shell
-is a simple UNIX command interpreter written in C.
-It reads commands from standard input or from a file and executes them,
-mimicking basic behavior of the standard /bin/sh shell.
+is a simple UNIX command interpreter written in C as part of the
+Holberton School curriculum. It reads commands from standard input
+or from a file and executes them, mimicking basic behavior of the
+standard /bin/sh shell.
 
 The shell supports:
 .IP \[bu] 2
@@ -25,14 +26,32 @@ Error handling and proper process management using
 .BR fork (2)
 and
 .BR execve (2) .
+.IP \[bu] 2
+Command line argument parsing and processing.
+
+.SH INVOCATION
+.B simple_shell
+can be invoked both interactively and non-interactively.
+If invoked with standard input connected to a terminal, an interactive
+shell is started. Otherwise, commands are read from standard input.
+
+.SH COMMAND EXECUTION
+Commands are searched in the following order:
+.IP 1. 3
+Built-in commands
+.IP 2. 3
+Absolute or relative paths (commands starting with / or .)
+.IP 3. 3
+Commands in directories specified by the PATH environment variable
 
 .SH BUILTINS
+The following built-in commands are supported:
 .TP
 .B exit
-Exit the shell.
+Exit the shell with status 0.
 .TP
 .B env
-Print the current environment variables.
+Print the current environment variables, one per line.
 
 .SH EXAMPLES
 .TP
@@ -40,19 +59,51 @@ Run in interactive mode:
 .EX
 $ ./hsh
 ($) /bin/ls
+main.c shell.c execute.c
+($) ls -l
+total 28
+-rw-rw-r-- 1 user user  131 Nov 10 12:00 AUTHORS
+($) env
+USER=student
+HOME=/home/student
+PATH=/usr/local/bin:/usr/bin:/bin
 ($) exit
+$
 .EE
 .TP
 Run in non-interactive mode:
 .EX
 $ echo "/bin/ls" | ./hsh
+main.c shell.c execute.c
+$ echo "env" | ./hsh
+USER=student
+HOME=/home/student
+PATH=/usr/local/bin:/usr/bin:/bin
 .EE
 
-.SH AUTHOR
-Written by Almansour Khaled Shaden and Teammate Name.
+.SH EXIT STATUS
+The shell returns the exit status of the last executed command.
+
+.SH ENVIRONMENT
+.B simple_shell
+uses the following environment variables:
+.TP
+.B PATH
+Colon-separated list of directories to search for executable files.
+
+.SH AUTHORS
+Written by Almansour Khaled Shaden and Tariq Almutairi.
 
 .SH SEE ALSO
 .BR sh (1),
+.BR bash (1),
 .BR execve (2),
-.BR fork (2)
+.BR fork (2),
+.BR wait (2)
 
+.SH BUGS
+No known bugs at this time.
+
+.SH COPYRIGHT
+This is free software: you are free to change and redistribute it.
+This project is part of the Holberton School curriculum.
