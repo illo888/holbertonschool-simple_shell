@@ -12,6 +12,9 @@
 
 extern char **environ;
 
+/* Global exit status */
+extern int last_exit_status;
+
 /* shell.c */
 void shell_loop(void);
 char *read_line(void);
@@ -29,6 +32,16 @@ void free_args(char **args);
 int builtin_env(void);
 int builtin_exit(char **args);
 int check_builtin(char **args);
+
+/* help.c */
+int builtin_help(char **args);
+
+/* signal_handler.c */
+void sigint_handler(int sig);
+void setup_signal_handlers(void);
+
+/* comment_handler.c */
+void remove_comment(char *line);
 
 /* error_handler.c */
 void print_error(char *program_name, char *cmd, char *msg);

@@ -17,20 +17,37 @@ void shell_loop(void)
 		line = read_line();
 		if (line == NULL)
 			break;
+
+		remove_comment(line);
 		args = split_line(line);
 
 		if (args[0] != NULL)
 		{
 			builtin_status = check_builtin(args);
-			if (builtin_status == -1)
+			if (builtin_status <= -2)
+			{
+				last_exit_status = -2 - builtin_status;
+				free(line);
+				free_args(args);
+				break;
+			}
+			else if (builtin_status == -1)
 			{
 				free(line);
 				free_args(args);
 				break;
 			}
-			else if (builtin_status == 0)
+			else if (builtin_status == 1)
 			{
-				execute(args);
+				/* Builtin executed, continue */
+			}
+			else if (strcmp(args[0], "help") == 0)
+			{
+				builtin_help(args);
+			}
+			else
+			{
+				last_exit_status = execute(args);
 			}
 		}
 

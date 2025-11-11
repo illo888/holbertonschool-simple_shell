@@ -22,22 +22,31 @@ int builtin_env(void)
 }
 
 /**
- * builtin_exit - exits the shell
- * @args: array of arguments (unused for basic exit)
+ * builtin_exit - exits the shell with optional status
+ * @args: array of arguments
  *
- * Return: 0 to exit
+ * Return: -2 to signal exit with custom status, -1 for normal exit
  */
 int builtin_exit(char **args)
 {
-	(void)args;
-	return (0);
+	int status = 0;
+
+	if (args[1] != NULL)
+	{
+		status = atoi(args[1]);
+		if (status < 0)
+			status = 2;
+	}
+
+	return (-2 - status);
 }
 
 /**
  * check_builtin - checks if command is a builtin and executes it
  * @args: array of command arguments
  *
- * Return: 1 if builtin was executed, 0 if not a builtin
+ * Return: exit status, -1 for normal exit, -2-status for exit with status,
+ *         1 if builtin executed, 0 if not a builtin
  */
 int check_builtin(char **args)
 {
@@ -52,7 +61,7 @@ int check_builtin(char **args)
 
 	if (strcmp(args[0], "exit") == 0)
 	{
-		return (-1);
+		return (builtin_exit(args));
 	}
 
 	return (0);
