@@ -27,18 +27,19 @@ int builtin_env(void)
  *
  * Return: -2 to signal exit with custom status, -1 for normal exit
  */
-int shell_exit(char **args)
+int builtin_exit(char **args)
 {
-    int status = 0;
+	int status = 0;
 
-    if (args[1] != NULL)  /* فيه argument بعد exit */
-    {
-        status = atoi(args[1]);  /* تحويل النص إلى رقم */
-    }
+	if (args[1] != NULL)
+	{
+		status = atoi(args[1]);
+		if (status < 0)
+			status = 2;
+	}
 
-    exit(status);  /* إنهاء البرنامج بالقيمة المحددة */
+	return (-2 - status);
 }
-
 /**
  * check_builtin - checks if command is a builtin and executes it
  * @args: array of command arguments
