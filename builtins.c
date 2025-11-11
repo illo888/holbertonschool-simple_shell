@@ -27,18 +27,16 @@ int builtin_env(void)
  *
  * Return: -2 to signal exit with custom status, -1 for normal exit
  */
-int builtin_exit(char **args)
+int shell_exit(char **args)
 {
-	int status = 0;
+    int status = 0;
 
-	if (args[1] != NULL)
-	{
-		status = atoi(args[1]);
-		if (status < 0)
-			status = 2;
-	}
+    if (args[1] != NULL)  /* فيه argument بعد exit */
+    {
+        status = atoi(args[1]);  /* تحويل النص إلى رقم */
+    }
 
-	return (-2 - status);
+    exit(status);  /* إنهاء البرنامج بالقيمة المحددة */
 }
 
 /**
