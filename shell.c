@@ -5,7 +5,7 @@
  */
 void shell_loop(void)
 {
-	char *line;
+	char *line, *expanded;
 	char **args;
 	int status = 1;
 	int builtin_status;
@@ -19,7 +19,8 @@ void shell_loop(void)
 			break;
 
 		remove_comment(line);
-		args = split_line(line);
+		expanded = process_line_variables(line);
+		args = split_line(expanded);
 
 		if (args[0] != NULL)
 		{
@@ -27,31 +28,26 @@ void shell_loop(void)
 			if (builtin_status <= -2)
 			{
 				last_exit_status = -2 - builtin_status;
-				free(line);
+				if (expanded != line)
+					free(expanded);
 				free_args(args);
 				break;
 			}
 			else if (builtin_status == -1)
 			{
-				free(line);
+				if (expanded != line)
+					free(expanded);
 				free_args(args);
 				break;
 			}
-			else if (builtin_status == 1)
-			{
-				/* Builtin executed, continue */
-			}
-			else if (strcmp(args[0], "help") == 0)
-			{
-				builtin_help(args);
-			}
-			else
+			else if (builtin_status == 0)
 			{
 				last_exit_status = execute(args);
 			}
 		}
 
-		free(line);
+		if (expanded != line)
+			free(expanded);
 		free_args(args);
 	}
 }

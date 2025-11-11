@@ -60,8 +60,30 @@ int check_builtin(char **args)
 	}
 
 	if (strcmp(args[0], "exit") == 0)
-	{
 		return (builtin_exit(args));
+
+	if (strcmp(args[0], "setenv") == 0)
+	{
+		builtin_setenv(args);
+		return (1);
+	}
+
+	if (strcmp(args[0], "unsetenv") == 0)
+	{
+		builtin_unsetenv(args);
+		return (1);
+	}
+
+	if (strcmp(args[0], "cd") == 0)
+	{
+		builtin_cd(args);
+		return (1);
+	}
+
+	if (strcmp(args[0], "help") == 0)
+	{
+		builtin_help(args);
+		return (1);
 	}
 
 	return (0);
