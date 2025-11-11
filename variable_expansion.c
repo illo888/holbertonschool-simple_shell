@@ -9,7 +9,6 @@
  */
 char *get_env_value(char *name, int len)
 {
-	int i = 0;
 	char temp[256];
 
 	if (len >= 256)
