@@ -34,7 +34,7 @@ ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
 			buf_size = read(fileno(stream), buffer, sizeof(buffer));
 			if (buf_size == 0)
 				return (line_len ? (ssize_t)line_len : -1);
-			if (buf_size < 0)
+			if (buf_size <= 0)
 				return (-1);
 			buf_pos = 0;
 		}
