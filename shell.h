@@ -62,4 +62,7 @@ char *process_line_variables(char *line);
 void print_error(char *program_name, char *cmd, char *msg);
 int get_exit_status(int status);
 
+/* getline_custom.c */
+ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
+
 #endif /* SHELL_H */
