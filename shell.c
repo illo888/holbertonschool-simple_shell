@@ -13,16 +13,25 @@ void shell_loop(void)
 	while (status)
 	{
 		printf("($) ");
+		fflush(stdout);
 		line = read_line();
+		if (line == NULL)
+			break;
 		args = split_line(line);
 
 		if (args[0] != NULL)
 		{
 			builtin_status = check_builtin(args);
 			if (builtin_status == -1)
-				status = 0;
+			{
+				free(line);
+				free_args(args);
+				break;
+			}
 			else if (builtin_status == 0)
+			{
 				execute(args);
+			}
 		}
 
 		free(line);
@@ -32,23 +41,26 @@ void shell_loop(void)
 
 /**
  * read_line - reads input from stdin
- * Return: pointer to line string
+ * Return: pointer to line string or NULL on EOF
  */
 char *read_line(void)
 {
 	char *line = NULL;
 	size_t bufsize = 0;
+	ssize_t read;
 
-	if (getline(&line, &bufsize, stdin) == -1)
+	read = getline(&line, &bufsize, stdin);
+	if (read == -1)
 	{
 		if (feof(stdin))
 		{
 			free(line);
-			exit(0);
+			return (NULL);
 		}
 		else
 		{
 			perror("readline");
+			free(line);
 			exit(1);
 		}
 	}

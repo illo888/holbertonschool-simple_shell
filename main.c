@@ -13,6 +13,7 @@ int main(int argc, char **argv)
 	char **args;
 	size_t len = 0;
 	int builtin_status;
+	int exit_status = 0;
 
 	(void)argc;
 	(void)argv;
@@ -32,12 +33,11 @@ int main(int argc, char **argv)
 				if (builtin_status == -1)
 				{
 					free_args(args);
-					free(line);
 					break;
 				}
 				else if (builtin_status == 0)
 				{
-					execute(args);
+					exit_status = execute(args);
 				}
 			}
 			free_args(args);
@@ -45,5 +45,5 @@ int main(int argc, char **argv)
 		free(line);
 	}
 
-	return (0);
+	return (exit_status);
 }
