@@ -11,7 +11,6 @@ char *expand_variables(char *line)
 	char *expanded, *var_value, *temp;
 	char var_name[256];
 	int i = 0, j = 0, k;
-	int in_var = 0;
 
 	expanded = malloc(4096);
 	if (!expanded)
@@ -43,7 +42,7 @@ char *expand_variables(char *line)
 			else
 			{
 				k = 0;
-				while (line[i] && (line[i] == '_' || 
+				while (line[i] && (line[i] == '_' ||
 					(line[i] >= 'A' && line[i] <= 'Z') ||
 					(line[i] >= 'a' && line[i] <= 'z') ||
 					(line[i] >= '0' && line[i] <= '9')))
