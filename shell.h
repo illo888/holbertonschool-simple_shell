@@ -11,8 +11,6 @@
 #include <signal.h>
 
 extern char **environ;
-
-/* Global exit status */
 extern int last_exit_status;
 
 /* shell.c */
@@ -27,6 +25,10 @@ int execute(char **args);
 char *_getenv(char *name);
 char *find_path(char *command);
 void free_args(char **args);
+
+/* string_utils.c */
+int _atoi(char *str);
+int is_number(char *str);
 
 /* builtins.c */
 int builtin_env(void);

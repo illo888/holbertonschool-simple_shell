@@ -1,6 +1,27 @@
 #include "shell.h"
 
 /**
+ * get_env_value - gets environment variable value
+ * @name: variable name
+ * @len: length of name
+ *
+ * Return: value or NULL
+ */
+char *get_env_value(char *name, int len)
+{
+	int i = 0;
+	char temp[256];
+
+	if (len >= 256)
+		return (NULL);
+
+	strncpy(temp, name, len);
+	temp[len] = '\0';
+
+	return (_getenv(temp));
+}
+
+/**
  * expand_variables - expands variables in a string
  * @line: the line containing variables
  *
@@ -8,86 +29,79 @@
  */
 char *expand_variables(char *line)
 {
-	char *expanded, *var_value, *temp;
-	char var_name[256];
-	int i = 0, j = 0, k;
+	char *result, *var_val;
+	int i = 0, j = 0, start;
+	char pid_str[20], status_str[20];
 
-	expanded = malloc(4096);
-	if (!expanded)
+	result = malloc(4096);
+	if (!result)
 		return (NULL);
 
 	while (line[i])
 	{
-		if (line[i] == '$')
+		if (line[i] == '$' && line[i + 1])
 		{
 			i++;
 			if (line[i] == '?')
 			{
-				sprintf(var_name, "%d", last_exit_status);
-				strcpy(&expanded[j], var_name);
-				j += strlen(var_name);
+				sprintf(status_str, "%d", last_exit_status);
+				strcpy(&result[j], status_str);
+				j += strlen(status_str);
 				i++;
 			}
 			else if (line[i] == '$')
 			{
-				sprintf(var_name, "%d", getpid());
-				strcpy(&expanded[j], var_name);
-				j += strlen(var_name);
+				sprintf(pid_str, "%d", getpid());
+				strcpy(&result[j], pid_str);
+				j += strlen(pid_str);
 				i++;
 			}
-			else if (line[i] == ' ' || line[i] == '\0')
+			else if (line[i] == ' ' || line[i] == '\t' || line[i] == '\n' || line[i] == '\0')
 			{
-				expanded[j++] = '$';
+				result[j++] = '$';
 			}
 			else
 			{
-				k = 0;
+				start = i;
 				while (line[i] && (line[i] == '_' ||
 					(line[i] >= 'A' && line[i] <= 'Z') ||
 					(line[i] >= 'a' && line[i] <= 'z') ||
 					(line[i] >= '0' && line[i] <= '9')))
+					i++;
+
+				var_val = get_env_value(&line[start], i - start);
+				if (var_val)
 				{
-					var_name[k++] = line[i++];
-				}
-				var_name[k] = '\0';
-				var_value = _getenv(var_name);
-				if (var_value)
-				{
-					strcpy(&expanded[j], var_value);
-					j += strlen(var_value);
+					strcpy(&result[j], var_val);
+					j += strlen(var_val);
 				}
 			}
 		}
 		else
 		{
-			expanded[j++] = line[i++];
+			result[j++] = line[i++];
 		}
 	}
-	expanded[j] = '\0';
-
-	temp = strdup(expanded);
-	free(expanded);
-	return (temp);
+	result[j] = '\0';
+	return (result);
 }
 
 /**
  * process_line_variables - processes a line for variable expansion
  * @line: the line to process
  *
- * Return: expanded line
+ * Return: expanded line (may be same as input if no variables)
  */
 char *process_line_variables(char *line)
 {
 	char *expanded;
 
-	if (strchr(line, '$') == NULL)
+	if (!line || !strchr(line, '$'))
 		return (line);
 
 	expanded = expand_variables(line);
 	if (expanded)
-	{
-		free(line);
 		return (expanded);
-	}
+
 	return (line);
 }

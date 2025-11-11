@@ -15,10 +15,16 @@ void remove_comment(char *line)
 
 	while (line[i])
 	{
-		if (line[i] == '#')
+		if (i == 0 && line[i] == '#')
 		{
 			line[i] = '\0';
-			break;
+			return;
+		}
+		if (line[i] == '#' && 
+			(line[i - 1] == ' ' || line[i - 1] == '\t' || line[i - 1] == '\n'))
+		{
+			line[i - 1] = '\0';
+			return;
 		}
 		i++;
 	}
