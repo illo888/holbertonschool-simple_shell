@@ -64,7 +64,7 @@ int get_exit_status(int status);
 
 /* getline_custom.c */
 ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
-nread = _getline(&line, &len, stdin);
+int  _getline(&line, &len, stdin);
 
 
 #endif /* SHELL_H */
